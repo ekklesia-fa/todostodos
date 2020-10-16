@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TODOS SIMPLE</title>
+    <link rel="stylesheet" href="./w3.css">
+    <style>
+        #filterSideBar {
+            position: absolute;
+            z-index: 9;
+            top: 0;
+            right: 0;
+        }
+    </style>
+</head>
+
+<body class="w3-light-gray">
+
+    <header class="w3-bar w3-xlarge w3-indigo">
+        <div class="w3-bar-item">TODOS SIMPLE</div>
+        <button class="w3-bar-item w3-button w3-right" onclick="todos.showFilterSideBar()">:</button>
+    </header>
+
+    <aside id="filterSideBar" class="w3-gray w3-animate-right" style="display: none;">
+        <button class="w3-button w3-display-topright w3-red" onclick="todos.hideFilterSideBar()">&times;</button>
+        <div class="w3-panel">
+            <label for="ikeyword">Search</label>
+            <input type="search" id="ikeyword" class="w3-input" placeholder="keyword" onkeyup="todos.onkeyupKeyword(this)">
+        </div>
+        <div class="w3-panel">
+            <label>Priority</label><br>
+            <input type="checkbox" id="ipriorlow" class="w3-check" value="low" checked onchange="todos.onchangePrior(this)">
+            <label for="ipriorlow">Low</label><br>
+            <input type="checkbox" id="ipriormiddle" class="w3-check" value="middle" checked onchange="todos.onchangePrior(this)">
+            <label for="ipriormiddle">Middle</label><br>
+            <input type="checkbox" id="ipriorhigh" class="w3-check" value="high" checked onchange="todos.onchangePrior(this)">
+            <label for="ipriorhigh">High</label>
+
+        </div>
+    </aside>
+
+    <div class="w3-panel">
+        <button class="w3-button w3-blue" onclick="todos.openModal('modalTodo','Add')">Add New</button>
+    </div>
+
+    <div class="w3-panel">
+        <div class="w3-padding-small w3-text-gray"><em>Filter by:</em></div>
+
+        <div class="w3-margin-bottom w3-padding-small w3-white" id="fkeyword" style="display: none;">
+            <div class="w3-tag w3-white w3-text-green">&blacktriangleright; Keyword : </div>
+            <div class="w3-show-inline-block">
+                <!-- <div class="w3 w3-tag w3-green">" contoh "</div> -->
+            </div>
+        </div>
+
+        <div class="w3-margin-bottom w3-padding-small w3-white" id="fprior" style="display: none;">
+            <div class="w3-tag w3-white w3-text-blue">&blacktriangleright; Priority : </div>
+            <div class="w3-show-inline-block">
+                <!-- <div class="w3 w3-tag w3-blue">contoh</div> -->
+            </div>
+        </div>
+
+    </div>
+
+    <main class="w3-panel">
+        <ul class="w3-ul" id="todos">
+            <!-- <li class="w3-white w3-row w3-margin-bottom w3-border-0 w3-leftbar w3-display-container">
+                <div class="w3-col s3">
+                    <div class="w3-xlarge">${list.id}</div>
+                    <div class="">${list.prior}</div>
+                </div>
+                <div class="w3-rest w3-margin-left">
+                    <div class="w3-xlarge">${list.title}</div>
+                    <div class="w3-text-gray">${list.desc}</div>
+                </div>
+                <div class="w3-button w3-large w3-blue w3-display-right" style="height: 100%;" onmouseover="todos.showAction(this)">
+                    <span>&ii;</span>
+                    <div class="w3-display-middle w3-animate-left" style="display: none;">
+                        <button class="w3-bar-item w3-button w3-blue">Edit</button>
+                        <button class="w3-bar-item w3-button w3-green">Check</button>
+                        <button class="w3-bar-item w3-button w3-red" onclick="todos.deleteList(this, '${list.id}')">Delete</button>
+                    </div>
+                </div>
+            </li> -->
+        </ul>
+    </main>
+
+
+
+
+
+    <div class="w3-modal" id="modalTodo">
+        <div class="w3-modal-content w3-animate-zoom">
+            <div class="w3-bar w3-blue">
+                <div class="w3-bar-item w3-xlarge" id="modalTitle">..</div>
+                <button class="w3-button w3-bar-item w3-red w3-right" onclick="todos.closeModal('modalTodo')">&times;</button>
+            </div>
+            <div class="w3-container w3-light-gray">
+                <form>
+                    <div class="w3-section">
+                        <label for="title" class="w3-text-gray">Title</label>
+                        <input type="text" name="title" class="w3-input w3-text-blue" autocomplete="off" autofocus>
+                    </div>
+                    <div class="w3-section">
+                        <label for="desc" class="w3-text-gray">Description</label>
+                        <input type="text" name="desc" class="w3-input w3-text-blue" autocomplete="off">
+                    </div>
+                    <div class="w3-section">
+                        <label for="group" class="w3-text-gray">Group</label>
+                        <input list="listGroup" name="group" class="w3-input w3-text-blue" autocomplete="off">
+                        <datalist id="listGroup">
+                            <option value="Job"></option>
+                            <option value="Family"></option>
+                            <option value="Vocation"></option>
+                            <option value="Sosmed"></option>
+                        </datalist>
+                    </div>
+                    <div class="w3-section">
+                        <label for="group" class="w3-text-gray">Priority</label>
+                        <select name="prior" class="w3-select w3-text-blue">
+                            <option value="" selected disabled></option>
+                            <option value="low">Low</option>
+                            <option value="middle">Middle</option>
+                            <option value="high">High</option>
+                        </select>
+                    </div>
+                    <div class="w3-section">
+                        <label class="w3-text-gray">Deadline</label>
+                        <input type="date" name="deadline1" class="w3-input w3-text-blue">
+                        <input type="time" name="deadline2" class="w3-input w3-text-blue">
+                    </div>
+                    <div class="w3-section">
+                        <input type="checkbox" name="loop" class="w3-check">
+                        <label for="loop">Looping</label>
+                    </div>
+                    <div class="w3-section">
+                        <button type="submit" class="w3-button w3-green" id="modalSubmit">..</button>
+                        <button type="reset" class="w3-button w3-orange">Reset</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <script src="./todos.js"></script>
+</body>
+
+</html>
