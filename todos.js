@@ -28,7 +28,8 @@ todos.setNewUlLi = (data) => {
 }
 
 todos.showTodos = () => {
-    todos.list = todos.getStorage('list');
+    todos.getStorage('list');
+    // todos.list = todos.getStorage('list');
     todos.newList = todos.list;
 
     if (todos.filter.keyword && todos.filter.keyword.length != 0) {
@@ -50,9 +51,11 @@ todos.setStorage = (name, data) => {
 todos.getStorage = (name) => {
     let data = localStorage.getItem(name);
     if (data) {
-        return JSON.parse(data);
+        // return JSON.parse(data);
+        todos.list = JSON.parse(data);
     } else {
-        return [];
+        // return [];
+        todos.list = [];
     }
 }
 
